@@ -20,6 +20,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           res = error("Not a proper format!");
           break;
         }
+        console.log("test")
 
         var player = store.players.find(player => player.id === client);
 
