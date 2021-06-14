@@ -4,7 +4,7 @@ import WebSocket from "ws";
 import { connect } from "./commands";
 import { handleMessage } from "./handler";
 import store from './store';
-import type { Player } from "./types/types";
+import { Player, Vector2 } from "./types/types";
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -35,9 +35,18 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
     res && ws.send(res);
   });
 
+  store.players.forEach(player => {
+    ws.send(JSON.stringify({
+      type: "moved",
+      playerId: player.id,
+      x: player.lastPosition.x,
+      y: player.lastPosition.y
+    }))
+  })
   const incomingPlayer : Player = {
     id: ws,
-    playerId: uuidv4()
+    playerId: uuidv4(),
+    lastPosition: new Vector2(0, 0)
   };
   connect(incomingPlayer);
   console.log("Player " + incomingPlayer.playerId + " connected!")
