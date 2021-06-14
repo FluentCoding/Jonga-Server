@@ -30,7 +30,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
         player.lastPosition.x = req.x;
         player.lastPosition.y = req.y;
-        player.lastPosition.facing = req.facing
+        player.lastPosition.facing = req.facing === 1 ? true : false
 
         store.players.forEach(player => {
           if (player.id !== client) {
