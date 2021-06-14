@@ -4,7 +4,7 @@ import WebSocket from "ws";
 import { connect } from "./commands";
 import { handleMessage } from "./handler";
 import store from './store';
-import { LastPosition, Player, Vector2 } from "./types/types";
+import { LastPosition, Player } from "./types/types";
 
 const app = express();
 const port = process.env.PORT || 80;
