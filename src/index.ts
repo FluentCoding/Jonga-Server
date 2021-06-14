@@ -35,14 +35,14 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
     res && ws.send(res);
   });
 
-  store.players.forEach(player => {
-    ws.send(JSON.stringify({
-      type: "moved",
+  ws.send(JSON.stringify({
+    type: "moved",
+    players: store.players.map(player => ({
       playerId: player.playerId,
       x: player.lastPosition.x,
       y: player.lastPosition.y
     }))
-  })
+  }))
   const incomingPlayer : Player = {
     id: ws,
     playerId: uuidv4(),
