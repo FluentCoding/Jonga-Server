@@ -4,7 +4,7 @@ import WebSocket from "ws";
 import { connect } from "./commands";
 import { handleMessage } from "./handler";
 import store from './store';
-import { Player, Vector2 } from "./types/types";
+import { LastPosition, Player, Vector2 } from "./types/types";
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -41,14 +41,15 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
       players: store.players.map(player => ({
         playerId: player.playerId,
         x: player.lastPosition.x,
-        y: player.lastPosition.y
+        y: player.lastPosition.y,
+        facing: player.lastPosition.facing ? 1 : -1
       }))
     }))
   }
   const incomingPlayer : Player = {
     id: ws,
     playerId: uuidv4(),
-    lastPosition: new Vector2(0, 0)
+    lastPosition: new LastPosition(0, 0, true)
   };
   connect(incomingPlayer);
   console.log("Player " + incomingPlayer.playerId + " connected!")

@@ -3,15 +3,17 @@ import WebSocket from "ws";
 export interface Player {
   id?: WebSocket; // MVP
   playerId: string;
-  lastPosition: Vector2;
+  lastPosition: LastPosition;
 }
 
-export class Vector2 {
+export class LastPosition {
   x: number;
-  y: number
+  y: number;
+  facing: boolean;
 
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, facing: boolean) {
     this.x = x;
     this.y = y;
+    this.facing = facing;
   }
 }

@@ -16,7 +16,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
     switch (req.command) {
       case "move":
-        if (!req.x || !req.y || !req.facing) {
+        if (!req.x || !req.y || !req.facing || req.facing != 1 || req.facing != -1) {
           res = error("Not a proper format!");
           break;
         }
@@ -30,7 +30,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
         player.lastPosition.x = req.x;
         player.lastPosition.y = req.y;
-        player.lastPosition.facing = req.facing 
+        player.lastPosition.facing = req.facing
 
         store.players.forEach(player => {
           if (player.id !== client) {
