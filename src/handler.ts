@@ -32,8 +32,6 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         player.lastPosition.y = req.y;
         player.lastPosition.facing = req.facing === 1 ? true : false
 
-        console.log(req.facing)
-
         store.players.forEach(player => {
           if (player.id !== client) {
             player.id?.send(JSON.stringify({
