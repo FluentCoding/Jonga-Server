@@ -41,6 +41,8 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             }))
           }
         })
+      case "ping":
+        res = "pong"
     }
 
     return res && JSON.stringify(res);
