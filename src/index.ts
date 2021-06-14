@@ -38,7 +38,7 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
   store.players.forEach(player => {
     ws.send(JSON.stringify({
       type: "moved",
-      playerId: player.id,
+      playerId: player.playerId,
       x: player.lastPosition.x,
       y: player.lastPosition.y
     }))

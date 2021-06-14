@@ -26,7 +26,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         if(!player)
           return "";
 
-        var id = player.id;
+        var id = player.playerId;
 
         player.lastPosition.x = req.x;
         player.lastPosition.y = req.y;
