@@ -23,7 +23,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
         var id = store.players.find(player => player.id === client)?.playerId
         store.players.forEach(player => {
-          if (player.id === client) {
+          if (player.id !== client) {
             player.id?.send(JSON.stringify({
               type: "moved",
               playerId: id,
