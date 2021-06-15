@@ -17,7 +17,23 @@ var store : GlobalStore = {
         lobbies: []
     },
     lobbies: [{
-        name: "Leck mich Mordekaiser",
+        name: "Lobby 1",
+        dateCreated: new Date(),
+        players: []
+    },{
+        name: "Lobby 2",
+        dateCreated: new Date(),
+        players: []
+    },{
+        name: "Lobby 3",
+        dateCreated: new Date(),
+        players: []
+    },{
+        name: "Lobby 4",
+        dateCreated: new Date(),
+        players: []
+    },{
+        name: "Lobby 5",
         dateCreated: new Date(),
         players: []
     }],
