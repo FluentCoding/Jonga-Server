@@ -31,7 +31,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             method: "set",
             message: store.lobbies.sort((a, b) => b.dateCreated.getTime() - a.dateCreated.getTime()).map(lobby => ({
               "name": lobby.name,
-              "size": lobby.players
+              "size": lobby.players.length
             }))
           }
         }
