@@ -21,8 +21,11 @@ var store : GlobalStore = {
     findPlayer: (client) => {
         return store.players.find(player => player.id === client);
     },
-    removePlayer: (playerId) => {
-        store.players = store.players.filter(value => value.id !== playerId);
+    removePlayer: (client) => {
+        store.players = store.players.filter(value => value.id !== client);
+        for (var key in Object.keys(store.subscriptions)) {
+            store.subscriptions[key] = store.subscriptions[key].filter(player => player.id !== client);
+        }
     }
 };
 
