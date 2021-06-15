@@ -40,16 +40,16 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
       type: "moved",
       players: store.players.map(player => ({
         playerId: player.playerId,
-        x: player.lastPosition.x,
-        y: player.lastPosition.y,
-        facing: player.lastPosition.facing ? 1 : -1
+        x: player.lastPosition?.x,
+        y: player.lastPosition?.y,
+        facing: player.lastPosition?.facing ? 1 : -1
       }))
     }))
   }
   const incomingPlayer : Player = {
     id: ws,
     playerId: uuidv4(),
-    lastPosition: new LastPosition(0, 0, true)
+    lastPosition: undefined
   };
   connect(incomingPlayer);
   console.log("Player " + incomingPlayer.playerId + " connected!")

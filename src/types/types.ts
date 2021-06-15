@@ -3,7 +3,13 @@ import WebSocket from "ws";
 export interface Player {
   id?: WebSocket; // MVP
   playerId: string;
-  lastPosition: LastPosition;
+  lastPosition?: LastPosition;
+}
+
+export interface Lobby {
+  name: string;
+  dateCreated: Date;
+  players: Player[];
 }
 
 export class LastPosition {
