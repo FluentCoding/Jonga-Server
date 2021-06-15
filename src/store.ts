@@ -23,7 +23,7 @@ var store : GlobalStore = {
     },
     removePlayer: (client) => {
         store.players = store.players.filter(value => value.id !== client);
-        for (var key in store.subscriptions.keys()) {
+        for (let key in store.subscriptions) {
             store.subscriptions[key] = store.subscriptions[key].filter(player => player.id !== client);
         }
     }
