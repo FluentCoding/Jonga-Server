@@ -34,6 +34,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               "size": lobby.players
             }))
           }
+          console.log(store.subscriptions.lobbies.length)
         }
         break;
       case "unsubscribe":
@@ -42,6 +43,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             break;
 
           store.subscriptions.lobbies = store.subscriptions.lobbies.filter(player => player.id !== client);
+          console.log(store.subscriptions.lobbies.length)
         }
         break;
       case "move":
