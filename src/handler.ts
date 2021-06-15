@@ -28,9 +28,12 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
         var id = player.playerId;
 
+        if (player.lastPosition.x === req.x && player.lastPosition.y === req.y && player.lastPosition.facing === (req.facing === 1))
+          return ""; // ignore packets if last position is the same one
+
         player.lastPosition.x = req.x;
         player.lastPosition.y = req.y;
-        player.lastPosition.facing = req.facing === 1 ? true : false
+        player.lastPosition.facing = req.facing === 1
 
         store.players.forEach(player => {
           if (player.id !== client) {
