@@ -16,7 +16,11 @@ var store : GlobalStore = {
     subscriptions: {
         lobbies: []
     },
-    lobbies: [],
+    lobbies: [{
+        name: "Leck mich Mordekaiser",
+        dateCreated: new Date(),
+        players: []
+    }],
 
     findPlayer: (client) => {
         return store.players.find(player => player.id === client);
