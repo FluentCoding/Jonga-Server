@@ -2,6 +2,7 @@ import { error, log } from "./responders";
 import WebSocket from "ws";
 import store from "./store";
 import { LastPosition } from "./types/types";
+import random from 'random';
 
 export function handleMessage(incoming: string, client: WebSocket): string {
   try {
@@ -55,7 +56,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           var player = store.findPlayer(client);
           if (player) {
             store.subscriptions.lobbies = store.subscriptions.lobbies.filter(player => player.id !== client);
-            player.color = Math.floor(Math.random()*16777215);
+            player.color = Math.floor(random.int(0, 2_147_483_647))
             res = {
               type: "success",
               message: "lobbyconnected",
