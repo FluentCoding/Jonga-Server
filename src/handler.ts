@@ -157,8 +157,8 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             var payload = {
               type: "moved",
               playerId: player.playerId,
-              x: req.x,
-              y: req.y,
+              x: req.x ?? 0,
+              y: req.y ?? 0,
               rotation: req.rotation,
               facing: req.facing
             }
