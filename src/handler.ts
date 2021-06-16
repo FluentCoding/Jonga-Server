@@ -83,6 +83,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         var lobby = store.lobbies.find(lobby => lobby.players.some(player => player.id === client));
         if (lobby) {
           lobby.players = lobby.players.filter(player => player.id !== client);
+          console.log(lobby.players)
           res = {
             type: "success",
             message: "lobbyleft"
