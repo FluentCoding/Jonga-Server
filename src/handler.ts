@@ -169,6 +169,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               lobbyPlayer.knowsColorsOf.push(player);
             }
 
+            console.log("actually sending :)")
             lobbyPlayer.id?.send(JSON.stringify(payload))
           }
         })
