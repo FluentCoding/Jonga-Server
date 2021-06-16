@@ -17,11 +17,13 @@ export interface Lobby {
 export class LastPosition {
   x: number;
   y: number;
+  rotation: number;
   facing: boolean;
 
-  constructor(x: number, y: number, facing: boolean) {
+  constructor(x: number, y: number, rotation: number, facing: boolean) {
     this.x = x;
     this.y = y;
+    this.rotation = rotation;
     this.facing = facing;
   }
 }

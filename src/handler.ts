@@ -69,6 +69,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
                   playerId: lobbyPlayer.playerId,
                   x: lobbyPlayer.lastPosition?.x,
                   y: lobbyPlayer.lastPosition?.y,
+                  rotation: lobbyPlayer.lastPosition?.rotation,
                   facing: lobbyPlayer.lastPosition?.facing ? 1 : -1,
                   color: lobbyPlayer.color
                 }))
@@ -125,7 +126,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         }
         break;
       case "move":
-        if (!req.x || !req.y || !req.facing || (req.facing != 1 && req.facing != -1)) {
+        if (!req.x || !req.y || !req.facing || !req.rotation || (req.facing != 1 && req.facing != -1)) {
           res = error("Not a proper format!");
           break;
         }
@@ -139,14 +140,15 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         if (!lobby)
           break;
 
-        if (player.lastPosition?.x === req.x && player.lastPosition?.y === req.y && player.lastPosition?.facing === (req.facing === 1))
+        if (player.lastPosition?.x === req.x && player.lastPosition?.y === req.y && player.lastPosition?.rotation === req.rotation && player.lastPosition?.facing === (req.facing === 1))
           break; // ignore packets if last position is the same one
 
         if (!player.lastPosition)
-          player.lastPosition = new LastPosition(req.x, req.y, req.facing === 1); // fuck javascript btw
+          player.lastPosition = new LastPosition(req.x, req.y, req.rotation, req.facing === 1); // fuck javascript btw
         else {
           player.lastPosition.x = req.x;
           player.lastPosition.y = req.y;
+          player.lastPosition.rotation = req.rotation;
           player.lastPosition.facing = req.facing === 1;
         }
 
@@ -157,6 +159,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               playerId: player.playerId,
               x: req.x,
               y: req.y,
+              rotation: req.rotation,
               facing: req.facing
             }
 
