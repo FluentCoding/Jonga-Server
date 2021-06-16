@@ -28,10 +28,17 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
 
     var lobby = store.removePlayer(ws);
     if (lobby) {
+      for (var subscriber of store.subscriptions.lobbies) {
+        subscriber.id?.send(JSON.stringify({
+          type: "lobbies",
+          method: "playerLeft",
+          name: lobby.name
+        }));
+      }
       lobby.players.forEach(player => player.id?.send(JSON.stringify(({
         type: "disconnected",
         playerId: playerId
-      })))) 
+      }))))
     }
     console.log("Player " + playerId + " disconnected!")
   })
