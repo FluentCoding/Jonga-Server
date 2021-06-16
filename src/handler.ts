@@ -55,7 +55,6 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           var player = store.findPlayer(client);
           if (player) {
             store.subscriptions.lobbies = store.subscriptions.lobbies.filter(player => player.id !== client);
-            lobby.players.push(player);
             res = {
               type: "success",
               message: "lobbyconnected"
@@ -71,6 +70,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
                 }))
               }))
             }
+            lobby.players.push(player);
           } else {
             res = error()
             console.log(res);
