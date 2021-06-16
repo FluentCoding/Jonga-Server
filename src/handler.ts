@@ -72,11 +72,11 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             }
             lobby.players.push(player);
             for (var subscriber of store.subscriptions.lobbies) {
-              subscriber.id?.send({
+              subscriber.id?.send(JSON.stringify({
                 type: "lobbies",
                 method: "playerJoined",
                 name: lobby.name
-              });
+              }));
             }
           } else {
             res = error()
@@ -91,11 +91,11 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         if (lobby) {
           lobby.players = lobby.players.filter(player => player.id !== client);
           for (var subscriber of store.subscriptions.lobbies) {
-            subscriber.id?.send({
+            subscriber.id?.send(JSON.stringify({
               type: "lobbies",
               method: "playerLeft",
               name: lobby.name
-            });
+            }));
           }
           lobby.players.forEach(player => player.id?.send(JSON.stringify(({
             type: "disconnected",
