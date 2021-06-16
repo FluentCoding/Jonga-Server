@@ -67,8 +67,8 @@ export function handleMessage(incoming: string, client: WebSocket): string {
                 type: "moved",
                 players: lobby.players.map(lobbyPlayer => ({
                   playerId: lobbyPlayer.playerId,
-                  x: lobbyPlayer.lastPosition?.x,
-                  y: lobbyPlayer.lastPosition?.y,
+                  x: lobbyPlayer.lastPosition?.x ?? 0,
+                  y: lobbyPlayer.lastPosition?.y ?? 0,
                   rotation: lobbyPlayer.lastPosition?.rotation,
                   facing: lobbyPlayer.lastPosition?.facing ? 1 : -1,
                   color: lobbyPlayer.color
