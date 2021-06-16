@@ -51,7 +51,8 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
   const incomingPlayer : Player = {
     id: ws,
     playerId: uuidv4(),
-    lastPosition: undefined
+    lastPosition: undefined,
+    knowsColorsOf: []
   };
   connect(incomingPlayer);
   console.log("Player " + incomingPlayer.playerId + " connected!")

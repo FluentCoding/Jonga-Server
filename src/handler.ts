@@ -62,14 +62,17 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             if (lobby.players.length !== 0) {
               client.send(JSON.stringify({
                 type: "moved",
-                players: lobby.players.filter(player => player.id !== client).map(player => ({
+                players: lobby.players.map(player => ({
                   playerId: player.playerId,
                   x: player.lastPosition?.x,
                   y: player.lastPosition?.y,
-                  facing: player.lastPosition?.facing ? 1 : -1
+                  facing: player.lastPosition?.facing ? 1 : -1,
+                  color: player.color
                 }))
               }))
             }
+            player.knowsColorsOf = lobby.players.slice(0);
+            player.color = parseInt(Math.floor(Math.random()*16777215).toString(16));
             lobby.players.push(player);
             for (var subscriber of store.subscriptions.lobbies) {
               subscriber.id?.send(JSON.stringify({
@@ -95,6 +98,8 @@ export function handleMessage(incoming: string, client: WebSocket): string {
             break;
 
           lobby.players = lobby.players.filter(player => player.id !== client);
+          lobby.players.forEach(lobbyPlayer => lobbyPlayer.knowsColorsOf =
+            lobbyPlayer.knowsColorsOf.filter(lobbyPlayer => lobbyPlayer.id != client));
           for (var subscriber of store.subscriptions.lobbies) {
             subscriber.id?.send(JSON.stringify({
               type: "lobbies",
@@ -105,7 +110,8 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           lobby.players.forEach(lobbyPlayer => lobbyPlayer.id?.send(JSON.stringify(({
             type: "disconnected",
             playerId: player?.playerId
-          })))) 
+          }))));
+          player.knowsColorsOf = [];
           res = {
             type: "success",
             message: "lobbyleft"
@@ -144,6 +150,19 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
         lobby.players.forEach(lobbyPlayer => {
           if (lobbyPlayer.id !== client && player) {
+            var payload = {
+              type: "moved",
+              playerId: player.playerId,
+              x: req.x,
+              y: req.y,
+              facing: req.facing
+            }
+
+            if (!lobbyPlayer.knowsColorsOf.some(lobbyPlayer => lobbyPlayer.id === client)) {
+              payload = Object.assign(payload, {color: player.color});
+              lobbyPlayer.knowsColorsOf.push(player);
+            }
+
             lobbyPlayer.id?.send(JSON.stringify({
               type: "moved",
               playerId: player.playerId,

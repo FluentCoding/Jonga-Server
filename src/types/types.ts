@@ -4,6 +4,8 @@ export interface Player {
   id?: WebSocket; // MVP
   playerId: string;
   lastPosition?: LastPosition;
+  color?: number;
+  knowsColorsOf: Player[];
 }
 
 export interface Lobby {
