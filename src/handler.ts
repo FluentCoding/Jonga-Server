@@ -84,6 +84,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
                 name: lobby.name
               }));
             }
+            console.log("very nice, " + player.playerId)
           } else {
             res = error()
             console.log(res);
