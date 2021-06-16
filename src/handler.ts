@@ -55,24 +55,26 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           var player = store.findPlayer(client);
           if (player) {
             store.subscriptions.lobbies = store.subscriptions.lobbies.filter(player => player.id !== client);
+            player.color = Math.floor(Math.random()*16777215);
             res = {
               type: "success",
-              message: "lobbyconnected"
+              message: "lobbyconnected",
+              mycolor: player.color
             }
+            player.color = Math.floor(Math.random()*16777215);
             if (lobby.players.length !== 0) {
               client.send(JSON.stringify({
                 type: "moved",
-                players: lobby.players.map(player => ({
-                  playerId: player.playerId,
-                  x: player.lastPosition?.x,
-                  y: player.lastPosition?.y,
-                  facing: player.lastPosition?.facing ? 1 : -1,
-                  color: player.color
+                players: lobby.players.map(lobbyPlayer => ({
+                  playerId: lobbyPlayer.playerId,
+                  x: lobbyPlayer.lastPosition?.x,
+                  y: lobbyPlayer.lastPosition?.y,
+                  facing: lobbyPlayer.lastPosition?.facing ? 1 : -1,
+                  color: lobbyPlayer.color
                 }))
               }))
             }
             player.knowsColorsOf = lobby.players.slice(0);
-            player.color = Math.floor(Math.random()*16777215);
             lobby.players.push(player);
             for (var subscriber of store.subscriptions.lobbies) {
               subscriber.id?.send(JSON.stringify({
