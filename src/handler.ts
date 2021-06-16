@@ -72,7 +72,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               }))
             }
             player.knowsColorsOf = lobby.players.slice(0);
-            player.color = parseInt(Math.floor(Math.random()*16777215).toString(16));
+            player.color = Math.floor(Math.random()*16777215);
             lobby.players.push(player);
             for (var subscriber of store.subscriptions.lobbies) {
               subscriber.id?.send(JSON.stringify({
@@ -160,6 +160,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
             if (!lobbyPlayer.knowsColorsOf.some(lobbyPlayer => lobbyPlayer.id === client)) {
               payload = Object.assign(payload, {color: player.color});
+              console.log(payload);
               lobbyPlayer.knowsColorsOf.push(player);
             }
 
