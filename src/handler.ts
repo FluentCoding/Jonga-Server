@@ -126,7 +126,6 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         }
         break;
       case "move":
-        console.log(req)
         if (!req.x || !req.y || !req.facing || !req.rotation || (req.facing != 1 && req.facing != -1)) {
           res = error("Not a proper format!");
           break;
