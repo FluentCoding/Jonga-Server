@@ -137,9 +137,9 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           player.lastPosition.facing = req.facing === 1;
         }
 
-        lobby.players.forEach(player => {
-          if (player.id !== client) {
-            player.id?.send(JSON.stringify({
+        lobby.players.forEach(lobbyPlayer => {
+          if (lobbyPlayer.id !== client && player) {
+            lobbyPlayer.id?.send(JSON.stringify({
               type: "moved",
               playerId: player.playerId,
               x: req.x,
