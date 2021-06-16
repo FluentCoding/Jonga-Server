@@ -61,7 +61,6 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               message: "lobbyconnected",
               mycolor: player.color
             }
-            player.color = Math.floor(Math.random()*16777215);
             if (lobby.players.length !== 0) {
               client.send(JSON.stringify({
                 type: "moved",
