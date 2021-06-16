@@ -71,6 +71,13 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               }))
             }
             lobby.players.push(player);
+            for (var subscriber of store.subscriptions.lobbies) {
+              subscriber.id?.send({
+                type: "lobbies",
+                method: "playerJoined",
+                name: lobby.name
+              });
+            }
           } else {
             res = error()
             console.log(res);
@@ -83,7 +90,17 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         var lobby = store.lobbies.find(lobby => lobby.players.some(player => player.id === client));
         if (lobby) {
           lobby.players = lobby.players.filter(player => player.id !== client);
-          console.log(lobby.players)
+          for (var subscriber of store.subscriptions.lobbies) {
+            subscriber.id?.send({
+              type: "lobbies",
+              method: "playerLeft",
+              name: lobby.name
+            });
+          }
+          lobby.players.forEach(player => player.id?.send(JSON.stringify(({
+            type: "disconnected",
+            playerId: player.playerId
+          })))) 
           res = {
             type: "success",
             message: "lobbyleft"
@@ -124,7 +141,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           if (player.id !== client) {
             player.id?.send(JSON.stringify({
               type: "moved",
-              playerId: client,
+              playerId: player.playerId,
               x: req.x,
               y: req.y,
               facing: req.facing

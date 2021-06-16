@@ -22,6 +22,10 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
   ws.on('close', () => {
     // Remove player from the system
     var playerId = store.players.find(player => player.id === ws)?.playerId;
+
+    if (!playerId)
+      return;
+
     var lobby = store.removePlayer(ws);
     if (lobby) {
       lobby.players.forEach(player => player.id?.send(JSON.stringify(({
