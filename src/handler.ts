@@ -89,6 +89,11 @@ export function handleMessage(incoming: string, client: WebSocket): string {
       case "leave":
         var lobby = store.lobbies.find(lobby => lobby.players.some(player => player.id === client));
         if (lobby) {
+          var player = store.findPlayer(client);
+
+          if (!player)
+            break;
+
           lobby.players = lobby.players.filter(player => player.id !== client);
           for (var subscriber of store.subscriptions.lobbies) {
             subscriber.id?.send(JSON.stringify({
@@ -97,9 +102,9 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               name: lobby.name
             }));
           }
-          lobby.players.forEach(player => player.id?.send(JSON.stringify(({
+          lobby.players.forEach(lobbyPlayer => lobbyPlayer.id?.send(JSON.stringify(({
             type: "disconnected",
-            playerId: player.playerId
+            playerId: player?.playerId
           })))) 
           res = {
             type: "success",
