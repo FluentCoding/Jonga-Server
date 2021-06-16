@@ -22,11 +22,13 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
   ws.on('close', () => {
     // Remove player from the system
     var playerId = store.players.find(player => player.id === ws)?.playerId;
-    store.removePlayer(ws);
-    store.players.forEach(player => player.id?.send(JSON.stringify(({
-      type: "disconnected",
-      playerId: playerId
-    }))))
+    var lobby = store.removePlayer(ws);
+    if (lobby) {
+      lobby.players.forEach(player => player.id?.send(JSON.stringify(({
+        type: "disconnected",
+        playerId: playerId
+      })))) 
+    }
     console.log("Player " + playerId + " disconnected!")
   })
 
@@ -35,17 +37,6 @@ wss.on("connection", (ws: WebSocket, req: http.IncomingMessage) => {
     res && ws.send(res);
   });
 
-  if (store.players.length !== 0) {
-    ws.send(JSON.stringify({
-      type: "moved",
-      players: store.players.map(player => ({
-        playerId: player.playerId,
-        x: player.lastPosition?.x,
-        y: player.lastPosition?.y,
-        facing: player.lastPosition?.facing ? 1 : -1
-      }))
-    }))
-  }
   const incomingPlayer : Player = {
     id: ws,
     playerId: uuidv4(),

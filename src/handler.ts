@@ -44,6 +44,55 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           store.subscriptions.lobbies = store.subscriptions.lobbies.filter(player => player.id !== client);
         }
         break;
+      case "join":
+        if (!req.name) {
+          res = error("Not a proper format!");
+          break;
+        }
+
+        var lobby = store.lobbies.find(lobby => lobby.name === req.name);
+        if (lobby) {
+          var player = store.findPlayer(client);
+          if (player) {
+            store.subscriptions.lobbies = store.subscriptions.lobbies.filter(player => player.id !== client);
+            lobby.players.push(player);
+            res = {
+              type: "success",
+              message: "lobbyconnected"
+            }
+            if (lobby.players.length !== 0) {
+              client.send(JSON.stringify({
+                type: "moved",
+                players: lobby.players.map(player => ({
+                  playerId: player.playerId,
+                  x: player.lastPosition?.x,
+                  y: player.lastPosition?.y,
+                  facing: player.lastPosition?.facing ? 1 : -1
+                }))
+              }))
+            }
+          } else {
+            res = error()
+            console.log(res);
+          }
+        } else {
+          res = error()
+        }
+        break;
+      case "leave":
+        var lobby = store.lobbies.find(lobby => lobby.players.some(player => player.id === client));
+        if (lobby) {
+          lobby.players = lobby.players.filter(player => player.id !== client);
+          res = {
+            type: "success",
+            message: "lobbyleft"
+          }
+        } else {
+          res = {
+            type: "error"
+          }
+        }
+        break;
       case "move":
         if (!req.x || !req.y || !req.facing || (req.facing != 1 && req.facing != -1)) {
           res = error("Not a proper format!");
@@ -53,6 +102,10 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         var player = store.findPlayer(client);
 
         if(!player)
+          break;
+
+        var lobby = store.lobbies.find(lobby => lobby.players.some(player => player.id === client));
+        if (!lobby)
           break;
 
         if (player.lastPosition?.x === req.x && player.lastPosition?.y === req.y && player.lastPosition?.facing === (req.facing === 1))
@@ -66,7 +119,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
           player.lastPosition.facing = req.facing === 1;
         }
 
-        store.players.forEach(player => {
+        lobby.players.forEach(player => {
           if (player.id !== client) {
             player.id?.send(JSON.stringify({
               type: "moved",

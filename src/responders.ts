@@ -10,7 +10,7 @@ export function log(message?: string): Response {
   };
 }
 
-export function error(message: string): Response {
+export function error(message?: string): Response {
   return {
     type: "error",
     message: message,
