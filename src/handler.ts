@@ -160,17 +160,10 @@ export function handleMessage(incoming: string, client: WebSocket): string {
 
             if (!lobbyPlayer.knowsColorsOf.some(lobbyPlayer => lobbyPlayer.id === client)) {
               payload = Object.assign(payload, {color: player.color});
-              console.log(payload);
               lobbyPlayer.knowsColorsOf.push(player);
             }
 
-            lobbyPlayer.id?.send(JSON.stringify({
-              type: "moved",
-              playerId: player.playerId,
-              x: req.x,
-              y: req.y,
-              facing: req.facing
-            }))
+            lobbyPlayer.id?.send(JSON.stringify(payload))
           }
         })
         break;
