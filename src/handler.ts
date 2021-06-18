@@ -136,18 +136,12 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         if(!player)
           break;
 
-        console.log("playerFound")
-
         var lobby = store.lobbies.find(lobby => lobby.players.some(player => player.id === client));
         if (!lobby)
           break;
 
-        console.log("lobbyFound")
-
         if (player.lastPosition?.x === req.x && player.lastPosition?.y === req.y && player.lastPosition?.rotation === req.rotation && player.lastPosition?.facing === (req.facing === 1))
           break; // ignore packets if last position is the same one
-        
-        console.log("newPosition")
 
         if (!player.lastPosition)
           player.lastPosition = new LastPosition(req.x, req.y, req.rotation, req.facing === 1); // fuck javascript btw
@@ -159,7 +153,6 @@ export function handleMessage(incoming: string, client: WebSocket): string {
         }
 
         lobby.players.forEach(lobbyPlayer => {
-          console.log("yes")
           if (lobbyPlayer.id !== client && player) {
             var payload = {
               type: "moved",
@@ -175,7 +168,6 @@ export function handleMessage(incoming: string, client: WebSocket): string {
               lobbyPlayer.knowsColorsOf.push(player);
             }
 
-            console.log("actually sending :)")
             lobbyPlayer.id?.send(JSON.stringify(payload))
           }
         })
