@@ -69,7 +69,7 @@ export function handleMessage(incoming: string, client: WebSocket): string {
                   playerId: lobbyPlayer.playerId,
                   x: lobbyPlayer.lastPosition?.x ?? 0,
                   y: lobbyPlayer.lastPosition?.y ?? 0,
-                  rotation: lobbyPlayer.lastPosition?.rotation,
+                  rotation: lobbyPlayer.lastPosition?.rotation ?? 0,
                   facing: lobbyPlayer.lastPosition?.facing ? 1 : -1,
                   color: lobbyPlayer.color
                 }))
